@@ -1,0 +1,22 @@
+{
+  "name": "digidip",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DijanaPrgomelja/DigiDip-Challenge.git"
+  },
+  "author": "",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/DijanaPrgomelja/DigiDip-Challenge/issues"
+  },
+  "homepage": "https://github.com/DijanaPrgomelja/DigiDip-Challenge#readme",
+  "dependencies": {
+    "axios": "^0.27.2"
+  }
+}
