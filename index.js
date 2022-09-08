@@ -9,8 +9,6 @@
 
 const axios = require("axios");
 
-// Get pets data
-
 /**
  * Async Function to get pet data.
  *
@@ -30,13 +28,11 @@ const getPetsData = async () => {
     console.error(error);
   }
 };
-
 /**
- * Function to format pet's and output pet's data.
+ * Function to format and output pet's data.
  *
- * @param {array} petData - Array of objects containing pet data.
  */
-const exportFormattedPetData = async (petData) => {
+const exportFormattedPetData = async () => {
   // Get pets data.
   const pets = await getPetsData();
 
