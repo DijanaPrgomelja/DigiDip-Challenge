@@ -23,33 +23,73 @@ const getPetsData = async () => {
       "https://www.xylesoft.de/dev/testing.json"
     );
 
+    // JW NOTE: check response data structure, to make sure you're working with what's expected.
+    if (!('data' in response) || !('data' in response.data)) {
+      throw new Error('No data');
+    }
+
+    if (!Array.isArray(response.data.data)) {
+      throw new Error('No pet items exist');
+    }
+    // JW NOTE: end.
+
     return response.data && response.data.data;
   } catch (error) {
     console.error(error);
+
+    // JW NOTE: No return exists, subsequent code could crash.
+    return [];
+    // JW NOTE: end.
   }
 };
+
 /**
  * Function to format and output pet's data.
  *
  */
 const exportFormattedPetData = async () => {
   // Get pets data.
+
+  // JW NOTE: `pets` could potentially be undefined if an error occurred in getPetsData(), causing the program to crash 
+  //          when variable isn't an array.
   const pets = await getPetsData();
+
+  if (pets.length === 0) {
+    return; // Added exit early check.
+  }
+  // JW NOTE: end.
 
   // Loop over, format and output pet's data.
   pets.forEach((pet) => {
+    // JW NOTE: Make sure pet.name, pet.surname, pet.dateOfBirth, pet.sex, pet.breed and pet.petType exist 
+    //          prior to mapping.
+    // if (!hasPetProperties(pet)) {
+    //   return; // skip invalid pet
+    // }
+    // JW NOTE: end.
+
     // Formatted pet's data.
     const formattedPet = {
       name: `${pet.name} ${pet.surname}`,
       age: calculateAge(pet.dateOfBirth),
+      // JW NOTE: pet.sex should of been checked and outputted as a "male" or "female".
       animal: `${pet.sex} ${pet.breed} ${pet.petType}`,
+      // animal: `${getMaleFemaleLabel(pet.sex)} ${pet.breed} ${pet.petType}`,
+      // JW NOTE: end.
     };
+
+
+    // JW NOTE: 1. Do no include a space between the JSON + \n, unnecassary data is being passed to the buffer.
+    //          2. No need to write to `output` variable, create JSON directly in process.stdout.write()
 
     // Convert object data to JSON string and add a new line
     const output = `${JSON.stringify(formattedPet)} \n`;
 
     // Output pet data
     process.stdout.write(output);
+
+    // process.stdout.write(`${JSON.stringify(formattedPet)}\n`);
+    // JW NOTE: end.
   });
 };
 
@@ -62,8 +102,17 @@ const exportFormattedPetData = async () => {
 const calculateAge = (dateOfBirth) => {
   const today = new Date();
   const birthDate = new Date(dateOfBirth);
-  const age = today.getFullYear() - birthDate.getFullYear();
-  return age;
+
+  // JW NOTE: 1. A pet could be born on 1. Jan 2022, making it 9 months old, although zero years will be returned.
+  //             Although I did not specify years, days or months, so not directly a mistake on your part, but lack of 
+  //             specification by me. Always raise a question when an assumption exists.
+  //          2. No need to create age variable, return calculation directly.
+
+  // const age = today.getFullYear() - birthDate.getFullYear();
+  // return age;
+
+  return today.getFullYear() - birthDate.getFullYear();
+  // JW NOTE: end.
 };
 
 // Export formatted pet data.
